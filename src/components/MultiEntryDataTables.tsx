@@ -30,6 +30,7 @@ interface MultiEntryDataTablesProps {
         valueBasedTextColor?: ValueBasedColor[];
         dateFormat?: { key: string; format: string };
         leftAlignedColums?: string;
+        rightAlignedColumns?: string;
         decimalColumns?: DecimalColumn[];
         [key: string]: any;
     };
@@ -164,11 +165,26 @@ const CustomRecursiveTable = ({ data, level = 0, colors, fonts, settings }: { da
                                 }}
                             ></th>
                         )}
-                        {primitiveKeys.map((key, index) => (
+                        {primitiveKeys.map((key, index) => {
+                            const rightAlignedCols = settings?.rightAlignedColumns 
+                                ? settings?.rightAlignedColumns.split(',').map((c: string) => c.trim())
+                                : [];
+                            const isRightAligned = rightAlignedCols.includes(key);
+                            
+                            const leftAlignedCols = settings?.leftAlignedColums
+                                ?  settings?.leftAlignedColums.split(',').map((c: string) => c.trim())
+                                : [];
+                            const isLeftAligned = leftAlignedCols.includes(key);
+                            
+                            let alignClass = 'text-left';
+                            if (isRightAligned) alignClass = 'text-right';
+                            else if (isLeftAligned) alignClass = 'text-left';
+
+                            return (
                              !hiddenLabels.includes(key) && (
                                 <th
                                     key={key}
-                                    className="px-2 py-1 text-left font-semibold uppercase tracking-wider whitespace-nowrap"
+                                    className={`px-2 py-1 ${alignClass} font-semibold uppercase tracking-wider whitespace-nowrap`}
                                     style={{
                                         fontSize: tableFontSize,
                                         color: colors.buttonText,
@@ -179,7 +195,8 @@ const CustomRecursiveTable = ({ data, level = 0, colors, fonts, settings }: { da
                                     {key.replace(/([A-Z])/g, ' $1').trim()}
                                 </th>
                              )
-                        ))}
+                            );
+                        })}
                     </tr>
                 </thead>
                 <tbody style={{ backgroundColor: colors.background }}>
@@ -243,11 +260,21 @@ const ExpandableRow = ({ row, primitiveKeys, arrayKeys, level, colors, fonts, in
         }
         
          // 3. Left Alignment Check
-         const leftAlignedColumns = settings?.leftAlignedColumns || settings?.leftAlignedColums
-         ? (settings?.leftAlignedColumns || settings?.leftAlignedColums).split(',').map((col: string) => col.trim())
+         const leftAlignedColumns =  settings?.leftAlignedColums
+         ? settings?.leftAlignedColums.split(',').map((col: string) => col.trim())
          : [];
          const isLeftAligned = leftAlignedColumns.includes(key);
 
+         const rightAlignedColumns = settings?.rightAlignedColumns
+         ? settings?.rightAlignedColumns.split(',').map((col: string) => col.trim())
+         : [];
+         const isRightAligned = rightAlignedColumns.includes(key);
+
+         if (isRightAligned) {
+             cellStyle.textAlign = 'right';
+         } else if (isLeftAligned) {
+             cellStyle.textAlign = 'left';
+         }
 
         // 4. Value Based Text Color
         if (settings?.valueBasedTextColor) {
