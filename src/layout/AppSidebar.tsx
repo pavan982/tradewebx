@@ -530,7 +530,8 @@ useEffect(() => {
   return (
     <aside
       id="app-sidebar"
-      className={`fixed mt-16 flex flex-col lg:mt-0 top-0 px-5 left-0 h-screen z-50
+      className={`fixed flex flex-col px-5 left-0 z-50 
+        top-16 h-[calc(100vh-64px)] lg:top-0 lg:h-screen
         ${isExpanded || isMobileOpen
           ? "w-[290px]"
           : isHovered
@@ -614,7 +615,7 @@ useEffect(() => {
       </div>
 
       </div>
-      <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
+      <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar pb-20">
         <nav
           className="mb-6"
           aria-label={navigationLabel}
