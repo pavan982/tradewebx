@@ -615,7 +615,7 @@ useEffect(() => {
       </div>
 
       </div>
-      <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar pb-20">
+      <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar pb-40">
         <nav
           className="mb-6"
           aria-label={navigationLabel}
